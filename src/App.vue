@@ -1,37 +1,31 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
+    
     <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <!-- <Class3 v-bind:name="num" /> -->
-    <!-- {{ num }} -->
-    <!-- {{ sayHello("Rahul") }} -->
-    <div v-if="num == 4">Hello</div>
-    <div v-else-if="num == 55">Paras</div>
-    <div v-else>Prince</div>
+    <Class3 v-bind:name="num" />
 
-    <div v-for="item in arr" v-bind:key="item.id">
-      {{ item.id }} {{ item.name }}
+    <button @click="getDummyData">Get Posts</button>
+
+    <div class="list">
+      <ul class="list-ul">
+        <li v-for="post in posts" :key="post.id">{{post.title}}</li>
+      </ul>
     </div>
-
-    <button v-on:click="clicked">Click here</button>
-    <button @click="clicked">Click here</button>
-
-    <h1>{{ newData }}</h1>
-
-    <input type="text" v-model="newData">
 
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-// import Class3 from './components/Class3.vue'
+import Class3 from './components/Class3.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
-    //Class3
+    Class3
   },
   data() {
     return {
@@ -47,12 +41,17 @@ export default {
         name: "Prince"
       }],
       newData: "Data to update",
+      posts: []
     }
   },
   created() {
     //this.sayHello("created hello");
     this.num = 55;
     //this.sayHello(this.num);
+    var element = document.getElementById("app");
+    // console.log(document);
+    // console.log(window);
+    console.log(element.id);
   },
   mounted() {
    // this.sayHello("mounted hello");
@@ -66,6 +65,16 @@ export default {
     },
     clicked() {
       this.newData = "Clicked";
+    },
+    async getDummyData() {
+      axios.get(`https://jsonplaceholder.typicode.com/posts`)
+      .then(response => {
+        this.posts = response.data;
+        //console.log(this.posts);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      })
     }
   }
 }
