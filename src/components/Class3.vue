@@ -9,7 +9,7 @@
 
 export default {
     props: {
-        name: String,
+        name: Number,
     },
     created() {
         console.log("created");
